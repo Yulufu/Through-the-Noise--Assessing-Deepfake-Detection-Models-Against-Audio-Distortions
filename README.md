@@ -10,7 +10,7 @@ Synthetic speech technology has advanced rapidly in recent years, making audio d
 ## Access to the Paper
 You can find the pdf of the paper in this repo, named Fu_Yulu_Thesis_2025.pdf.
 
-## Key Results
+## Key Results Summary
 
 This thesis provides a detailed comparison of the robustness of three deepfake detection models—Wav2Vec2, LCNN, and SafeEar—against a suite of real-world audio distortions. The study reveals that no single model architecture is universally robust; instead, each exhibits unique strengths and vulnerabilities tied to its design.
 The overall performance across all tested conditions is summarized below:
@@ -77,5 +77,202 @@ The performance drop is likely due to two primary effects:
 The follow-up experiment on smoothing the Impulse Response (IR) spectra confirmed that mitigating these spectral nulls significantly improved LCNN's performance, reinforcing that feature-based models are highly susceptible to this type of distortion.
 
 This insight strongly suggests that for deepfake detection systems to be reliable in the real world, future research must prioritize the development of reverberation-aware training techniques and model architectures.
-## Key Figures
-### 
+
+## Detailed Figures & Visualizations
+This section presents a selection of key figures from the thesis that visually summarize the performance of the Wav2Vec2, LCNN, and SafeEar models under different audio distortions. Each figure shows the Receiver Operating Characteristic (ROC) curve and the Detection Error Tradeoff (DET) curve.
+
+### 1. Overall Model Performance
+This figure aggregates the results across all tested conditions to provide a high-level summary of each model's general robustness. It clearly shows that while Wav2Vec2 is the strongest overall performer, all models are competitive.
+
+![alt text](figures/overall_roc_det_combined.png)
+
+> Wav2Vec2 (green) achieves the highest overall robustness (AUC ≈ 0.92), followed closely by LCNN (blue, AUC ≈ 0.91), and SafeEar (red, AUC ≈ 0.85).
+
+### 2. Performance Under Noise Augmentation
+
+The models were tested against three spectrally distinct noise types: broadband white noise, lower-frequency pink noise, and low-frequency-dominant brown noise.
+
+### White Noise
+
+#####  Wav2Vec2
+
+![alt text](figures/Wav2Vec2_white-noise_combined.png)
+
+##### LCNN
+
+![alt text](figures/LCNN_white-noise_combined.png)
+
+##### SafeEar
+
+![alt text](figures/SafeEar_white-noise_combined.png)
+
+### Pink Noise
+
+#####  Wav2Vec2
+
+![alt text](figures/Wav2Vec2_pink-noise_combined.png)
+
+##### LCNN
+
+![alt text](figures/LCNN_pink-noise_combined.png)
+
+##### SafeEar
+	
+![alt text](figures/SafeEar_pink-noise_combined.png)
+
+### Brown Noise
+
+#####  Wav2Vec2
+
+![alt text](figures/Wav2Vec2_brown-noise_combined.png)
+
+##### LCNN
+
+![alt text](figures/LCNN_brown-noise_combined.png)
+
+##### SafeEar
+	
+![alt text](figures/SafeEar_brown-noise_combined.png)
+
+**Interpretation**: This comparison highlights the models' spectral sensitivities. LCNN is extremely vulnerable to broadband white and pink noise, which corrupts its LFCC features. Wav2Vec2 is robust across all noise types, especially brown noise. SafeEar shows strong resilience in extreme low-SNR conditions but is weak against low-frequency brown noise.
+
+### 3. Performance Under Temporal Distortions 
+
+This section explores how models handle changes to the audio's speed (time-stretching) and pitch (pitch-shifting).
+
+### Time-stretching
+
+**Audio speed was decreased from 0.9x down to 0.1x of the original.**
+
+#### Wav2Vec2
+
+![alt text](figures/Wav2Vec2_time-stretch-slower_combined.png)
+
+#### LCNN
+
+![alt text](figures/LCNN_time-stretch-slower_combined.png)
+
+#### SafeEar
+
+![alt text](figures/SafeEar_time-stretch-slower_combined.png)
+
+**Audio speed was increased from 1.1x up to 2.0x of the original.**
+
+#### Wav2Vec2
+
+![alt text](figures/Wav2Vec2_time-stretch-faster_combined.png)
+
+#### LCNN
+
+![alt text](figures/LCNN_time-stretch-faster_combined.png)
+
+#### SafeEar
+
+![alt text](figures/SafeEar_time-stretch-faster_combined.png)
+
+**Interpretation**: LCNN is almost perfectly immune to time-stretching. Wav2Vec2, which relies on precise waveform timing, degrades catastrophically when the audio is slowed down significantly. All models handle speeding up better than slowing down.
+
+### Pitch-shifting
+
+**Pitch was increased from +1 to +10 semitones.**
+
+#### Wav2Vec2
+
+![alt text](figures/Wav2Vec2_pitch-shift-up_combined.png)
+
+#### LCNN
+
+![alt text](figures/LCNN_pitch-shift-up_combined.png)
+
+#### SafeEar
+
+![alt text](figures/SafeEar_pitch-shift-up_combined.png)
+
+**Pitch was decreased from -1 to -10 semitones.**
+
+#### Wav2Vec2
+
+![alt text](figures/Wav2Vec2_pitch-shift-down_combined.png)
+
+#### LCNN
+
+![alt text](figures/LCNN_pitch-shift-down_combined.png)
+
+#### SafeEar
+
+![alt text](figures/SafeEar_pitch-shift-down_combined.png)
+
+**Interpretation**: Similar to time-stretching, LCNN is the most robust model against pitch shifts. Wav2Vec2 shows a distinct failure point beyond ±6 semitones. SafeEar is uniquely vulnerable to downward pitch shifts, suggesting its acoustic tokens are sensitive to the artifacts created by lowering pitch.
+
+### 4. Performance Under Reverberation
+
+Reverberation proved to be the most significant and universal challenge, with performance tested in three distinct acoustic environments.
+
+### Small Room Reverb
+
+**RT30 from 0.04 s to 0.34 s**
+
+#### Wav2Vec2
+
+![alt text](figures/Wav2Vec2_reverb-small-room_combined.png)
+
+#### LCNN
+
+![alt text](figures/LCNN_reverb-small-room_combined.png)
+
+#### SafeEar
+
+![alt text](figures/SafeEar_reverb-small-room_combined.png)
+
+### Large Room Reverb
+
+**RT30 from 1.67 s to 2.00 s**
+
+#### Wav2Vec2
+
+![alt text](figures/Wav2Vec2_reverb-large-room_combined.png)
+
+#### LCNN
+
+![alt text](figures/LCNN_reverb-large-room_combined.png)
+
+#### SafeEar
+
+![alt text](figures/SafeEar_reverb-large-room_combined.png)
+
+### Open Space Reverb
+
+**RT30 are 0.17 s for Koli Park, 0.40 s for beach, and 0.58 s for forest.**
+
+#### Wav2Vec2
+
+![alt text](figures/Wav2Vec2_reverb-open-space_combined.png)
+
+#### LCNN
+	
+![alt text](figures/LCNN_reverb-open-space_combined.png)
+
+#### SafeEar
+
+![alt text](figures/SafeEar_reverb-open-space_combined.png)
+
+
+**Interpretation**: All models struggle with reverberation. Performance degrades significantly as the reverb time increases, with large rooms causing near-total failure for Wav2Vec2. LCNN is the most resilient in highly reverberant spaces, but still suffers. This highlights reverberation as a critical weakness in modern deepfake detection systems.
+
+### 5. Performance Under Codec Compression
+
+This test measured the models' robustness to the types of compression commonly used in telecommunications and media streaming.
+
+#### Wav2Vec2
+
+![alt text](figures/Wav2Vec2_codec_combined.png)
+
+#### LCNN
+
+![alt text](figures/LCNN_codec_combined.png)
+
+#### SafeEar
+
+![alt text](figures/SafeEar_codec_combined.png)
+
+**Interpretation**: All three models were almost completely unaffected by codec compression. This indicates that current detection systems are highly robust to the artifacts introduced by common audio codecs like MP3, Opus, and GSM.
